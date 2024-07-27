@@ -59,6 +59,11 @@ async def login(formData: dict):
 
 @app.post("/register")
 async def register(formData: dict):
+    if len(formData['cardID'])!=12 or formData['cardID'].isdigit()==False:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid card ID",
+        )
     user = supabase.table("member").insert({"name": formData['name'], "cardID": formData['cardID'], "email": formData['email'], "password": formData['password']}).execute()
     if user:
         return {"message": "User created successfully"}

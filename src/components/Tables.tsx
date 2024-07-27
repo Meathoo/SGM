@@ -1,4 +1,4 @@
-const people = [
+const records = [
     { name: '藥櫃1', address: '108台北市萬華區武昌街二段56號', time: '2024-07-16 09:15:33.913363+00', prescription: '查看' },
     { name: '藥櫃2', address: '106台北市大安區通化街91號', time: '2024-07-17 14:58:28.532605+00', prescription: '查看' },
     // More people...
@@ -47,16 +47,16 @@ const people = [
                   </tr>
                 </thead>
                 <tbody>
-                  {people.map((person) => (
-                    <tr key={person.time}>
+                  {records.map((record) => (
+                    <tr key={record.time}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0 dark:text-white">
-                        {person.name}
+                        {record.name}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.address}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.time}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{record.address}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{record.time}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                          {person.prescription}
+                        <a href="#" className="text-emerald-500 hover:text-emerald-300">
+                          {record.prescription}
                         </a>
                       </td>
                       {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">

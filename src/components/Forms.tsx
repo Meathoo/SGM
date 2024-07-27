@@ -2,11 +2,13 @@
 
 import { Button } from '@/components/Button'
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { Alert } from './Alert';
 
 export function LoginForm() {
     // const router = useRouter();
+    const [isWrong, setisWrong] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -28,6 +30,7 @@ export function LoginForm() {
                 body: JSON.stringify(formData),
             });
             if (!response.ok) {
+                setisWrong(true);
                 throw new Error('Network response was not ok');
             }
             const result = await response.json();
@@ -35,9 +38,11 @@ export function LoginForm() {
             // const cookies = new Cookies();
             // cookies.set('session_id', result.session_id, { path: '/', secure: true, sameSite :true});
             // console.log(`cookies: ${cookies.get('session_id')}`);
-            alert(`登入成功`);
-            document.location.href="/";
+            // alert(`登入成功`);
+            setIsLoggedIn(true);
+            // document.location.href="/";   
         } catch (error) {
+            setisWrong(true);
             console.error('Fetch Error:', error);
         }
     };
@@ -64,19 +69,22 @@ export function LoginForm() {
             <>登入</>
           </Button>
         </div>
+        {isLoggedIn && <Alert type={0} title={"登入成功"} msg={"歡迎！"} buttonText={"回首頁"} url={"/"}/>}
+        {isWrong && <Alert type={1} title={"登入失敗"} msg={"電子郵件或密碼錯誤"} buttonText={"回登入頁面"} url={"/login"}/>}
       </form>
     )
 }
 
 export function RegisterForm() {
-  const router = useRouter();
+  const [isRegSucc, setisRegSucc] = useState(false);
+  const [isWrong, setisWrong] = useState(false);
   const [formData, setFormData] = useState({
       name: '',
       cardID: '',
       email: '',
       password: '',
   });
-
+  
   const handleChange = (e: any) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
@@ -93,13 +101,16 @@ export function RegisterForm() {
               body: JSON.stringify(formData),
           });
           if (!response.ok) {
+              setisWrong(true);
               throw new Error('Network response was not ok');
           }
 
           const result = await response.json();
-          alert('註冊成功');
-          router.push("/login");
+          setisRegSucc(true);
+          // alert('註冊成功');
+          // router.push("/login");
       } catch (error) {
+          setisWrong(true);
           console.error('Fetch Error:', error);
       }
   };
@@ -138,6 +149,8 @@ export function RegisterForm() {
         <Button type='submit'>
           <>註冊</>
         </Button>
+        {isRegSucc && <Alert type={0} title={"註冊成功"} msg={"歡迎加入！"} buttonText={"回登入頁面"} url={"/login"}/>}
+        {isWrong && <Alert type={1} title={"註冊失敗"} msg={"請檢查輸入格式"} buttonText={"回註冊頁面"} url={"/registration"}/>}
       </div>
     </form>
   )
