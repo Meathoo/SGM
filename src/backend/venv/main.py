@@ -54,7 +54,7 @@ async def login(formData: dict):
 
     session_id = create_session(res.data[0]["id"])
     if len(res.data)>0:
-        return {"message": "Login Successfully", "session_id": session_id}
+        return {"message": "Login Successfully", "session_id": session_id, "id": res.data[0]['id']}
     return {"message": "Login Failed"}
 
 @app.post("/register")
@@ -68,3 +68,28 @@ async def register(formData: dict):
     if user:
         return {"message": "User created successfully"}
     return {"message": "User creation failed"}
+
+@app.post("/changePwd")
+async def changePwd(formData: dict):
+    user = supabase.table("member").select("*").eq("id", formData['id']).execute()
+    print(user.data[0]['password'])
+
+    if formData['oldPassword'] != user.data[0]['password']:
+        raise HTTPException(
+            status_code=401,
+            detail="Wrong old password",
+        )
+    if formData['oldPassword'] == formData['newPassword']:
+        raise HTTPException(
+            status_code=401,
+            detail="same password",
+        )
+    if formData['newPassword'] != formData['newPasswordAgain']:
+        raise HTTPException(
+            status_code=401,
+            detail="Check new password and repeat it",
+        )
+    res = supabase.table("member").update({"password": formData['newPassword']}).eq("id", user.data[0]['id']).execute()
+    if res:
+        return {"message": "Password changed successfully"}
+    return {"message": "Failed to change password  "}

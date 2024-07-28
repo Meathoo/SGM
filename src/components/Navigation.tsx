@@ -289,6 +289,7 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
           {user!=="" && (
             <Button variant="filled" className="w-full" onClick={() => {
               localStorage.removeItem("session_id");
+              localStorage.removeItem("id");
               document.location.href="/";}}>
             登出
             </Button>
